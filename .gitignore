@@ -1,0 +1,24 @@
+# 依赖
+node_modules/
+
+# 环境变量（含数据库密码，勿提交）
+.env
+
+# 日志
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 编辑器
+.idea/
+.vscode/
+*.swp
+
+# 构建产物（如需前端直接由后端托管，可取消注释并按需提交 dist）
+# frontend/dist/
