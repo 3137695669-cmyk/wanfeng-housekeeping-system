@@ -4,7 +4,7 @@
 
 本项目已从纯前端版本升级为**前后端分离架构**：
 - **前端**：Vue 3 + Vite
-- **后端**：Node.js + Express + SQLite3
+- **后端**：Node.js + Express + MySQL8.0
 - **数据存储**：MySQL 本地数据库
 
 ## 📁 目录结构
