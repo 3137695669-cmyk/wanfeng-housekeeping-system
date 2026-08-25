@@ -71,8 +71,13 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
-import * as echarts from 'echarts'
+import * as echarts from 'echarts/core'
+import { LineChart, BarChart } from 'echarts/charts'
+import { GridComponent, TooltipComponent } from 'echarts/components'
+import { CanvasRenderer } from 'echarts/renderers'
 import { adminAPI } from '../api'
+
+echarts.use([LineChart, BarChart, GridComponent, TooltipComponent, CanvasRenderer])
 
 // ---- 暗色大屏配色（来自已验证的 dark 调色板）----
 const C = {

@@ -186,9 +186,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, defineAsyncComponent } from 'vue'
 import { adminAPI, servicesAPI, settingsAPI } from '../api'
-import DataDashboard from './DataDashboard.vue'
+
+// 数据大屏按需加载：echarts 仅在实际打开大屏时才下载
+const DataDashboard = defineAsyncComponent(() => import('./DataDashboard.vue'))
 
 defineEmits(['logout'])
 
