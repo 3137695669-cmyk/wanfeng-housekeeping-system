@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xxd)",
+      "Bash(sed -i 's|<span>让家更有温度</span>|<span class=\"text-anime\">让家更有温度</span>|' 晚枫家政服务.html)",
+      "Bash(sed -i 's|📅 立即预约服务|✨ 立即预约服务|g' 晚枫家政服务.html)",
+      "Bash(sed -i 's|📞 400-888-6666|<span class=\"deco-star\">★</span> 400-888-6666|1' 晚枫家政服务.html)",
+      "Bash(sed -i 's|📍 服务范围：全市覆盖|🏠 服务范围：全市覆盖|' 晚枫家政服务.html)",
+      "Bash(sed -i 's|<div class=\"section-header\">|<div class=\"section-header\" style=\"animation: slide-in-blur 0.8s ease both;\">|1' 晚枫家政服务.html)",
+      "Bash(sed -i 's|class=\"about-image\">🍁</div>|class=\"about-image\" style=\"animation: float-rotate 4s ease-in-out infinite;\">🍁<br><span style=\"font-size:0.3em;display:block;margin-top:8px;\">✦ 晚枫 · 让家更有温度 ✦</span></div>|' 晚枫家政服务.html)",
+      "Bash(sed -i 's|class=\"contact-icon\">📞</div>|class=\"contact-icon\" style=\"animation: wiggle 3s ease infinite;\">📞</div>|' 晚枫家政服务.html)",
+      "Bash(sed -i 's|class=\"contact-icon\">💬</div>|class=\"contact-icon\" style=\"animation: wiggle 3s ease infinite; animation-delay: 0.5s;\">💬</div>|' 晚枫家政服务.html)",
+      "Bash(sed -i 's|class=\"contact-icon\">📍</div>|class=\"contact-icon\" style=\"animation: bounce-cute 3s ease infinite;\">🏠</div>|' 晚枫家政服务.html)",
+      "Bash(sed -i 's|class=\"service-card\"|class=\"service-card card-moe\"|g' 晚枫家政服务.html)",
+      "Bash(sed -i 's|class=\"staff-card\"|class=\"staff-card card-moe\"|g' 晚枫家政服务.html)",
+      "Bash(sed -i 's|class=\"review-card\"|class=\"review-card card-moe\"|g' 晚枫家政服务.html)",
+      "Bash(sed -i 's|🔑 管理后台|<span class=\"deco-star\">✦</span> 管理后台|' 晚枫家政服务.html)",
+      "Bash(sed -i 's|class=\"stat-num\"|class=\"stat-num bounce-hover\"|g' 晚枫家政服务.html)",
+      "Bash(sed -i 's|<h2>我们的服务项目</h2>|<h2><span class=\"deco-star delay-1\">★</span> 我们的服务项目 <span class=\"deco-star delay-2\">★</span></h2>|' 晚枫家政服务.html)",
+      "Bash(sed -i 's|<h2>家政团队展示</h2>|<h2><span class=\"deco-star delay-1\">★</span> 家政团队展示 <span class=\"deco-star delay-3\">★</span></h2>|' 晚枫家政服务.html)",
+      "Bash(sed -i 's|<h2>客户评价</h2>|<h2><span class=\"deco-star delay-1\">★</span> 客户评价 <span class=\"deco-star delay-4\">★</span></h2>|' 晚枫家政服务.html)",
+      "Bash(sed -i 's|关于<span>晚枫</span>|关于<span class=\"text-anime\">晚枫</span>|' 晚枫家政服务.html)",
+      "Bash(sed -i 's|预约<span>服务</span>|预约<span class=\"text-anime\">服务</span>|' 晚枫家政服务.html)",
+      "Bash(node *)",
+      "Bash(find . -name \"*.db\")",
+      "Bash(ls -la backend/data/)",
+      "Bash(sqlite3 *)",
+      "Bash(netstat -ano)",
+      "Bash(mysql *)",
+      "Bash(/c/Program Files/MySQL/MySQL Server 8.0/bin/mysql *)",
+      "Bash(sc query *)",
+      "Bash(npx vite *)",
+      "Bash(curl -s http://localhost:3000/api/health)",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(powershell *)"
+    ]
+  }
+}

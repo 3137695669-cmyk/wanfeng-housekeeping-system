@@ -1,0 +1,184 @@
+:root {
+  --maple: #c7511a;
+  --maple-light: #e87a3e;
+  --maple-dark: #8b3a10;
+  --cream: #fef8f2;
+  --warm-bg: #fdf3e9;
+  --text: #3d2c1e;
+  --text-light: #6b5744;
+  --white: #ffffff;
+  --border: #e8d5c4;
+  --shadow: 0 4px 24px rgba(139, 58, 16, 0.08);
+  --radius: 12px;
+  --transition: 0.3s ease;
+  --green: #2d8a3e;
+  --red: #d9444a;
+  --blue: #3b6eb5;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+  color: var(--text);
+  background: var(--body-bg, var(--white));
+  line-height: 1.7;
+  transition: background-color 0.5s ease;
+}
+
+/* 自定义背景图层：固定在所有内容后面 */
+.custom-bg-layer {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+/* 自定义背景时，让各区块半透明以露出背景图 */
+body:not([data-theme]) .hero,
+body:not([data-theme]) .section {
+  background: rgba(255, 255, 255, 0.75) !important;
+}
+
+body:not([data-theme]) .navbar {
+  background: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* ===== 背景主题 ===== */
+body[data-theme="maple"] {
+  --body-bg: #ffffff;
+  --cream: #fef8f2;
+  --warm-bg: #fdf3e9;
+}
+
+body[data-theme="mint"] {
+  --body-bg: #f9fcf9;
+  --cream: #f5faf7;
+  --warm-bg: #eaf7ee;
+}
+
+body[data-theme="sakura"] {
+  --body-bg: #fefbfc;
+  --cream: #fef5f8;
+  --warm-bg: #fde8ef;
+}
+
+body[data-theme="ocean"] {
+  --body-bg: #f8fafd;
+  --cream: #f5f8fc;
+  --warm-bg: #e8eff9;
+}
+
+body[data-theme="galaxy"] {
+  --body-bg: #1a1a2e;
+  --cream: #222240;
+  --warm-bg: #1e1e36;
+  --text: #e0ddf0;
+  --text-light: #a099cc;
+  --border: #3a3560;
+}
+
+body[data-theme="pure"] {
+  --body-bg: #fafafa;
+  --cream: #fafafa;
+  --warm-bg: #f0f0f0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 36px;
+  border-radius: 28px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition);
+}
+
+.btn-primary {
+  background: var(--maple);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--maple-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(199, 81, 26, 0.25);
+}
+
+.btn-outline {
+  background: #fff;
+  color: var(--maple);
+  border: 1.5px solid var(--maple);
+}
+
+.btn-outline:hover {
+  background: var(--cream);
+}
+
+.btn-sm {
+  padding: 8px 20px;
+  font-size: 0.85rem;
+}
+
+.section {
+  padding: 90px 0;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 56px;
+}
+
+.section-header h2 {
+  font-size: 2.1rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.section-header p {
+  color: var(--text-light);
+  font-size: 1.05rem;
+}
+
+.card-moe {
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.card-moe:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 16px 40px rgba(196, 77, 255, 0.12), 0 0 0 2px rgba(255, 107, 157, 0.15);
+}

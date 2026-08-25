@@ -1,0 +1,35 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "启动本地服务器并调试",
+      "type": "chrome",
+      "request": "launch",
+      "file": "${workspaceFolder}/晚枫家政服务.html",
+      "userDataDir": false,
+      "preLaunchTask": "启动LiveServer"
+    },
+    {
+      "name": "直接打开HTML文件",
+      "type": "chrome",
+      "request": "launch",
+      "file": "${workspaceFolder}/晚枫家政服务.html",
+      "userDataDir": false
+    },
+    {
+      "name": "Edge浏览器调试",
+      "type": "edge",
+      "request": "launch",
+      "file": "${workspaceFolder}/晚枫家政服务.html",
+      "userDataDir": false,
+      "preLaunchTask": "启动LiveServer"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "完整调试环境",
+      "configurations": ["启动本地服务器并调试"],
+      "stopAll": true
+    }
+  ]
+}

@@ -1,0 +1,258 @@
+# 晚枫家政服务系统 项目说明书
+
+## 一、项目概述
+
+晚枫家政服务系统一套完整家政服务预约管理平台，包含两个版本：
+
+- 旧版：纯前端单文件 HTML，双击即用
+- 新版：Vue 3 前端 + Node.js 后端 + MySQL 数据库，前后端分离架构
+
+---
+
+## 二、版本对比
+
+| 对比项       | 旧版（单文件）               | 新版（前后端分离）            |
+| :----------- | :--------------------------- | :---------------------------- |
+| 文件         | 晚枫家政服务.html            | frontend/ + backend/          |
+| 前端技术     | HTML + CSS + 原生 JS         | Vue 3 + Vite                  |
+| 后端技术     | 无                           | Node.js + Express             |
+| 数据库       | 浏览器 localStorage          | MySQL 8.0                     |
+| 启动方式     | 双击 HTML 文件               | 需启动前后端两个服务          |
+| 数据存储     | 浏览器本地，换电脑看不到     | MySQL 数据库，数据集中管理    |
+| 访问地址     | 文件路径                     | http://localhost:5173         |
+| 适用场景     | 快速演示、简单展示           | 正式使用、多用户、数据管理    |
+
+两个版本顶部的"🚀 进入新版"按钮可以互相跳转。
+
+---
+
+## 三、新版项目结构
+
+```
+晚枫家政服务系统/
+├── 晚枫家政服务.html           # 旧版（单文件，双击即用）
+├── frontend/                   # 新版前端
+│   ├── package.json
+│   ├── vite.config.js
+│   ├── index.html
+│   └── src/
+│       ├── main.js
+│       ├── App.vue
+│       ├── api.js              # API 接口封装
+│       ├── style.css
+│       └── components/         # Vue 组件
+│           ├── NavBar.vue
+│           ├── HeroSection.vue
+│           ├── ServicesSection.vue
+│           ├── StaffSection.vue
+│           ├── BookingSection.vue
+│           ├── ReviewsSection.vue
+│           ├── LoginModal.vue
+│           ├── RegisterModal.vue
+│           └── AdminPanel.vue
+├── backend/                    # 新版后端
+│   ├── package.json
+│   ├── server.js               # 后端入口（端口 3000）
+│   ├── database.js             # 数据库连接与初始化
+│   ├── .env                    # 数据库连接配置
+│   └── routes/                 # API 路由
+│       ├── users.js            # 用户相关
+│       ├── staff.js            # 服务人员
+│       ├── services.js         # 服务项目
+│       ├── bookings.js         # 预约管理
+│       ├── reviews.js          # 评价管理
+│       ├── admin.js            # 管理员
+│       └── migrate.js          # 数据迁移
+└── 项目说明书.txt               # 本文件
+```
+
+---
+
+## 四、MySQL 数据库说明
+
+本项目使用 MySQL 8.0 存储数据，数据库不在项目文件夹内，而是独立安装在系统中。
+
+### 数据库连接信息（backend/.env）
+
+```
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=123456
+DB_NAME=wanfeng
+```
+
+### MySQL 安装位置（本机）
+
+```
+C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe
+```
+
+### 验证 MySQL 是否运行
+
+```bash
+"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql" -u root -p123456 -e "SHOW DATABASES;"
+```
+
+能看到 `wanfeng` 数据库即表示正常。
+
+> 💡 数据文件实际存放在系统 MySQL 数据目录中（不在项目文件夹），无需手动管理。
+
+---
+
+## 五、新版启动方法（重要）
+
+### 前置条件
+
+- ✅ Node.js 已安装（终端输入 `node -v` 检查）
+- ✅ MySQL 8.0 已安装并启动（Windows 服务名：MySQL80）
+- ✅ 项目依赖已安装（backend/node_modules 和 frontend/node_modules 已存在）
+
+### 第一步：启动后端（开一个终端）
+
+```bash
+cd "C:\Users\wuyue\Desktop\晚枫家政服务系统\backend"
+node server.js
+```
+
+看到以下输出表示成功：
+
+```
+✅ MySQL 数据库连接成功
+✅ 数据表创建成功
+🍁 晚枫家政服务系统后端已启动
+📍 服务地址: http://localhost:3000
+```
+
+### 第二步：启动前端（另开一个终端）
+
+```bash
+cd "C:\Users\wuyue\Desktop\晚枫家政服务系统\frontend"
+npx vite --host
+```
+
+看到以下输出表示成功：
+
+```
+VITE v5.x.x  ready in xxx ms
+➜  Local:   http://localhost:5173/
+```
+
+### 第三步：打开浏览器
+
+访问 **http://localhost:5173** 即可进入新版。
+
+### 首次启动补充
+
+如果是全新环境（node_modules 被删除等情况），先安装依赖：
+
+```bash
+# 后端
+cd "C:\Users\wuyue\Desktop\晚枫家政服务系统\backend"
+npm install
+
+# 前端
+cd "C:\Users\wuyue\Desktop\晚枫家政服务系统\frontend"
+npm install
+```
+
+---
+
+## 六、新版 API 接口
+
+### 健康检查
+
+| 方法   | 路径           | 说明                   |
+| :----- | :------------- | :--------------------- |
+| GET    | /api/health    | 检查后端是否正常运行   |
+
+### 用户
+
+| 方法   | 路径                  | 说明       |
+| :----- | :-------------------- | :--------- |
+| GET    | /api/users            | 用户列表   |
+| POST   | /api/users/register   | 用户注册   |
+| POST   | /api/users/login      | 用户登录   |
+
+### 服务人员
+
+| 方法   | 路径                    | 说明               |
+| :----- | :---------------------- | :----------------- |
+| GET    | /api/staff              | 所有服务人员       |
+| GET    | /api/staff/:id          | 单个人员详情       |
+| POST   | /api/staff/login        | 服务人员登录       |
+| PUT    | /api/staff/:id/rate     | 更新评分           |
+
+### 服务项目
+
+| 方法   | 路径                     | 说明             |
+| :----- | :----------------------- | :--------------- |
+| GET    | /api/services            | 所有服务项目     |
+| GET    | /api/services/:id        | 单个服务详情     |
+| PUT    | /api/services/:id        | 更新服务信息     |
+
+### 预约
+
+| 方法   | 路径                            | 说明               |
+| :----- | :------------------------------ | :----------------- |
+| GET    | /api/bookings                   | 预约列表           |
+| GET    | /api/bookings/staff/:staffId    | 某师傅的预约       |
+| POST   | /api/bookings                   | 创建预约           |
+| PUT    | /api/bookings/:id/status        | 更新预约状态       |
+
+### 评价
+
+| 方法   | 路径                    | 说明             |
+| :----- | :---------------------- | :--------------- |
+| GET    | /api/reviews            | 评价列表         |
+| GET    | /api/reviews/stats      | 评价统计         |
+| POST   | /api/reviews            | 发表评价         |
+
+> 前端通过 Vite 配置将 /api 请求代理转发到后端 3000 端口。
+
+---
+
+## 七、默认测试账号
+
+- 管理员：`admin` / `wanfeng2025`
+- 家政师傅：默认密码统一 `888888`（共 8 位师傅）
+- 普通用户：可直接注册新账号
+
+---
+
+## 八、默认数据（首次启动自动创建）
+
+数据库 `wanfeng` 首次启动时自动建表并插入：
+
+- 6 个服务项目：日常保洁、深度清洁、月嫂服务、养老护理、家电清洗、收纳整理
+- 8 位服务人员：李秀芳、张美华、王桂兰、陈晓燕、赵建国、刘丽娟、孙明辉、周玉兰
+- 6 条用户评价
+
+---
+
+## 九、常见问题
+
+### Q1：点击"进入新版"没反应？
+A：新版前后端服务没有启动，按第五章步骤启动即可。
+
+### Q2：启动后端报"数据库连接失败"？
+A：MySQL 服务未运行。检查 Windows 服务里 MySQL80 是否已启动。
+
+### Q3：端口被占用？
+A：后端默认 3000 端口，前端默认 5173 端口。关掉占用程序或修改配置。
+
+### Q4：旧版还能用吗？
+A：能。直接双击 `晚枫家政服务.html` 即可打开，所有功能独立运行，不依赖后端。
+
+### Q5：数据在哪里？
+A：旧版数据在浏览器 localStorage 中；新版数据在 MySQL 数据库 `wanfeng` 中。
+
+---
+
+## 十、项目亮点
+
+1. 双版本共存，旧版零门槛演示，新版完整前后端架构
+2. 动漫风 UI 设计，流光动画、星光粒子等视觉效果
+3. 客户-师傅-管理员三方角色完整闭环
+4. 响应式布局，电脑/平板/手机自动适配
+5. 代码结构清晰，便于二次开发和功能扩展
+6. 适合课程设计、毕业设计、门店演示等多种场景

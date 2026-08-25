@@ -1,0 +1,28 @@
+{
+  "name": "wanfeng-housekeeping-backend",
+  "version": "1.0.0",
+  "description": "晚枫家政服务系统 - 后端",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
+    "express": "^4.18.2",
+    "multer": "^2.1.1",
+    "mysql2": "^3.22.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "housekeeping",
+    "家政",
+    "express"
+  ],
+  "author": "WanFeng",
+  "license": "MIT"
+}
