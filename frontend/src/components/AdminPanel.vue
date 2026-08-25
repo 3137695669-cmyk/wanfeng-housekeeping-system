@@ -9,8 +9,14 @@
     <!-- 标签导航 -->
     <div class="admin-tabs">
       <button :class="['tab-btn', { active: activeTab === 'stats' }]" @click="switchTab('stats')">📊 数据概览</button>
+      <button :class="['tab-btn', { active: activeTab === 'dashboard' }]" @click="switchTab('dashboard')">📈 数据大屏</button>
       <button :class="['tab-btn', { active: activeTab === 'services' }]" @click="switchTab('services')">🔧 服务管理</button>
       <button :class="['tab-btn', { active: activeTab === 'about' }]" @click="switchTab('about')">🍁 关于我们</button>
+    </div>
+
+    <!-- 数据大屏 -->
+    <div v-if="activeTab === 'dashboard'">
+      <DataDashboard />
     </div>
 
     <!-- 数据概览 -->
@@ -182,6 +188,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { adminAPI, servicesAPI, settingsAPI } from '../api'
+import DataDashboard from './DataDashboard.vue'
 
 defineEmits(['logout'])
 

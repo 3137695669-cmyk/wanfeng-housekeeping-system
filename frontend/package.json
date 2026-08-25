@@ -9,14 +9,19 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.4.0",
-    "axios": "^1.6.0"
+    "axios": "^1.6.0",
+    "echarts": "^6.1.0",
+    "vue": "^3.4.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.0",
     "vite": "^5.0.0"
   },
-  "keywords": ["housekeeping", "家政", "vue"],
+  "keywords": [
+    "housekeeping",
+    "家政",
+    "vue"
+  ],
   "author": "WanFeng",
   "license": "MIT"
 }

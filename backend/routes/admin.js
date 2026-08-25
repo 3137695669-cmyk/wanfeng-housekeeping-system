@@ -79,4 +79,32 @@ router.get('/stats', async (req, res) => {
   }
 });
 
+// GET /api/admin/analytics — 数据大屏分析数据（月度趋势 + 评价星级分布）
+router.get('/analytics', async (req, res) => {
+  try {
+    const [trend, ratingRows] = await Promise.all([
+      db.all(
+        `SELECT LEFT(service_date, 7) as month,
+                COUNT(*) as count,
+                COALESCE(SUM(COALESCE(price, 0)), 0) as revenue
+         FROM bookings
+         WHERE service_date IS NOT NULL AND service_date != ''
+         GROUP BY LEFT(service_date, 7)
+         ORDER BY month ASC`
+      ),
+      db.all(`SELECT stars, COUNT(*) as count FROM reviews GROUP BY stars`)
+    ]);
+
+    // 星级分布补齐 1~5 星
+    const ratingDist = [1, 2, 3, 4, 5].map(stars => {
+      const row = ratingRows.find(r => Number(r.stars) === stars);
+      return { stars, count: row ? row.count : 0 };
+    });
+
+    res.json({ trend, ratingDist });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

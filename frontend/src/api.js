@@ -68,7 +68,8 @@ export const usersAPI = {
 
 export const adminAPI = {
   login: (data) => api.post('/admin/login', data),
-  stats: () => api.get('/admin/stats')
+  stats: () => api.get('/admin/stats'),
+  analytics: () => api.get('/admin/analytics')
 }
 
 export const settingsAPI = {
