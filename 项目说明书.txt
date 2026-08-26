@@ -2,10 +2,11 @@
 
 ## 一、项目概述
 
-晚枫家政服务系统一套完整家政服务预约管理平台，包含两个版本：
+晚枫家政服务系统一套完整家政服务预约管理平台，包含「业务系统 + 离线数仓」两大模块：
 
 - 旧版：纯前端单文件 HTML，双击即用
 - 新版：Vue 3 前端 + Node.js 后端 + MySQL 数据库，前后端分离架构
+- 离线数仓：Hadoop HDFS + Hive 四层数仓 + Airflow 调度，产出经营分析报表（见 `data-warehouse/`）
 
 ---
 
@@ -63,6 +64,13 @@
 │       ├── reviews.js          # 评价管理
 │       ├── admin.js            # 管理员
 │       └── migrate.js          # 数据迁移
+├── data-warehouse/             # 离线数仓（大数据模块）
+│   ├── generate_data.py        # 造数脚本（生成 CSV）
+│   ├── docker-compose.yml      # HDFS + Hive + Airflow 完整栈
+│   ├── hive/                   # 四层 ETL SQL（01~04_*.sql）
+│   ├── airflow/                # Airflow 调度 DAG
+│   ├── README.md               # 数仓快速上手
+│   └── 数仓分层设计与维度建模.md  # 分层与建模设计文档
 └── 项目说明书.txt               # 本文件
 ```
 
@@ -248,11 +256,54 @@ A：旧版数据在浏览器 localStorage 中；新版数据在 MySQL 数据库 
 
 ---
 
-## 十、项目亮点
+## 十、离线数仓（大数据模块）
+
+在业务系统基础上搭建的 Hadoop + Hive 离线数仓，把业务数据加工成经营分析报表，
+形成「业务系统 → 数仓 → 数据大屏」的完整数据链路。
+
+### 技术栈
+
+| 组件 | 版本 | 职责 |
+| :--- | :--- | :--- |
+| Apache Hadoop（HDFS） | 3.3.6 | 分布式存储，数仓数据落盘 |
+| Apache Hive | 4.0.0 | SQL 计算，四层 ETL 加工 |
+| Apache Airflow | 2.10.5 | 每日定时调度四层 ETL |
+| ECharts | — | 数据大屏消费 ADS 结果 |
+
+### 数仓分层（ODS / DWD / DWS / ADS）
+
+| 层 | 作用 |
+| :--- | :--- |
+| ODS 贴源层 | 原样加载 CSV，保留脏数据 |
+| DWD 明细层 | 清洗 / 去重 / 标准化，维度表 + 事实表 |
+| DWS 汇总层 | 按天 / 按主题轻度汇总 |
+| ADS 应用层 | 师傅业绩榜、月度经营报表 |
+
+### 启动方法
+
+```bash
+cd data-warehouse
+python generate_data.py                    # 1. 造数（订单100万 / 评价20万等）
+docker compose up -d --build               # 2. 起 HDFS + Hive + Airflow
+docker exec wanfeng-airflow airflow dags trigger wanfeng_etl   # 3. 触发四层 ETL
+```
+
+### 关键产出
+
+- `wanfeng_ads.ads_staff_performance` —— 师傅业绩榜
+- `wanfeng_ads.ads_monthly_report` —— 月度经营报表
+
+> 详细分层设计与表结构见 `data-warehouse/数仓分层设计与维度建模.md`，快速上手见 `data-warehouse/README.md`。
+
+---
+
+## 十一、项目亮点
 
 1. 双版本共存，旧版零门槛演示，新版完整前后端架构
 2. 动漫风 UI 设计，流光动画、星光粒子等视觉效果
 3. 客户-师傅-管理员三方角色完整闭环
 4. 响应式布局，电脑/平板/手机自动适配
 5. 代码结构清晰，便于二次开发和功能扩展
-6. 适合课程设计、毕业设计、门店演示等多种场景
+6. Hadoop + Hive 离线数仓（四层架构 + 星型模型），百万级数据加工成经营报表
+7. Airflow 每日定时调度，业务 → 数仓 → 大屏数据闭环
+8. 适合课程设计、毕业设计、门店演示、大数据项目等多种场景

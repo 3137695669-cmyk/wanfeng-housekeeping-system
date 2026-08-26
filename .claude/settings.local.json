@@ -53,7 +53,10 @@
       "Bash($D run *)",
       "Bash(/c/Users/wuyue/AppData/Local/Programs/DockerDesktop/resources/bin/docker.exe info *)",
       "Bash(/c/Users/wuyue/AppData/Local/Programs/DockerDesktop/resources/bin/docker.exe pull *)",
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(grep -viE 'node_modules|^total|^d.*\\\\.$')",
+      "Bash(grep -iE '\\\\.md|\\\\.txt|\\\\.md$|^d|说明书|计划|README|docs')",
+      "Bash(grep -vE '^total|^d.* \\(\\\\.|\\\\.\\\\.\\)$')"
     ]
   }
 }

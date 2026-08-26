@@ -2,10 +2,11 @@
 
 ## 📋 项目简介
 
-本项目已从纯前端版本升级为**前后端分离架构**：
+本项目已从纯前端版本升级为**前后端分离架构**，并扩展了**离线数仓**大数据模块：
 - **前端**：Vue 3 + Vite
 - **后端**：Node.js + Express + MySQL8.0
 - **数据存储**：MySQL 本地数据库
+- **离线数仓**：Hadoop HDFS + Hive 四层数仓 + Airflow 调度（`data-warehouse/`）
 
 ## 📁 目录结构
 
@@ -44,6 +45,12 @@
 │           ├── RegisterModal.vue
 │           └── AdminPanel.vue
 ├── 晚枫家政服务.html          # 旧版纯前端文件（保留）
+├── data-warehouse/            # 离线数仓（大数据模块）
+│   ├── generate_data.py      # 造数脚本（生成 CSV）
+│   ├── docker-compose.yml    # HDFS + Hive + Airflow 完整栈
+│   ├── hive/                 # 四层 ETL SQL（01~04）
+│   ├── airflow/              # Airflow 调度 DAG
+│   └── README.md             # 数仓快速上手
 └── README.md                  # 本文件
 ```
 
@@ -79,6 +86,21 @@ npm run dev
 ### 3️⃣ 访问应用
 
 在浏览器中打开：`http://localhost:5173`
+
+## 🛠️ 离线数仓模块（Hadoop + Hive + Airflow）
+
+在业务系统之上搭建的离线数仓，把业务数据加工成经营分析报表，形成「业务系统 → 数仓 → 数据大屏」数据闭环。
+
+```bash
+cd data-warehouse
+python generate_data.py                    # 造数（订单100万 / 评价20万）
+docker compose up -d --build               # 起 HDFS + Hive + Airflow
+docker exec wanfeng-airflow airflow dags trigger wanfeng_etl   # 触发四层 ETL
+```
+
+- **四层架构**：ODS 贴源 → DWD 明细 → DWS 汇总 → ADS 应用（星型模型）
+- **产出**：师傅业绩榜、月度经营报表
+- **详细设计**：见 `data-warehouse/数仓分层设计与维度建模.md`
 
 ## 🔧 API 接口说明
 
