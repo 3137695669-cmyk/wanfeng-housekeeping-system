@@ -32,7 +32,28 @@
       "Bash(npx vite *)",
       "Bash(curl -s http://localhost:3000/api/health)",
       "Bash(curl -s http://localhost:3000)",
-      "Bash(powershell *)"
+      "Bash(powershell *)",
+      "Bash(docker --version)",
+      "Bash(wsl --status)",
+      "Bash(winget --version)",
+      "Bash(python generate_data.py --small)",
+      "Bash(cd *)",
+      "Bash(python generate_data.py)",
+      "Bash(docker version *)",
+      "Bash(docker info *)",
+      "Read(//c/Program Files/Docker/Docker/resources/bin/**)",
+      "Read(//c/Program Files/Docker/Docker/**)",
+      "Bash(where.exe docker *)",
+      "Bash(wsl -d Ubuntu -- docker --version)",
+      "Bash(DD=\"/c/Users/wuyue/AppData/Local/Programs/DockerDesktop/resources/bin/docker.exe\"; echo \"=== CLI 版本 ===\" ; \"$DD\" --version 2>&1; echo \"=== 客户端/服务端 ===\" ; \"$DD\" version 2>&1 | head -40)",
+      "Bash([ -f \"$F\" ])",
+      "Read(//c/Users/wuyue/AppData/Roaming/Docker/**)",
+      "Bash(docker run *)",
+      "Bash(cmd //c \"where docker\")",
+      "Bash($D run *)",
+      "Bash(/c/Users/wuyue/AppData/Local/Programs/DockerDesktop/resources/bin/docker.exe info *)",
+      "Bash(/c/Users/wuyue/AppData/Local/Programs/DockerDesktop/resources/bin/docker.exe pull *)",
+      "WebFetch(domain:raw.githubusercontent.com)"
     ]
   }
 }

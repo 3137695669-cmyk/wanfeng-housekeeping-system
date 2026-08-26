@@ -1,0 +1,113 @@
+# ============================================================
+# 晚枫家政 · 离线数仓 完整部署（HDFS + Hive + Airflow）
+# ------------------------------------------------------------
+# 服务拓扑：
+#   namenode / datanode : Apache Hadoop 3.3.6 —— 真正的 HDFS 存储
+#   hive                 : Apache Hive 4.0.0（HiveServer2）—— 计算 + 元数据
+#                          Tez 本地模式计算，仓库落盘到 hdfs://namenode:8020/warehouse
+#   airflow              : Apache Airflow 2.10.5 —— 每日定时调度四层 ETL
+#
+# 数据流：造数 CSV → HDFS(ODS/DWD/DWS/ADS) → Airflow DAG 定时跑 ETL → 大屏
+#
+# 启动：docker compose up -d --build
+# 日志：docker compose logs -f hive
+# 触发一次 ETL：docker exec wanfeng-airflow airflow dags trigger wanfeng_etl
+# ============================================================
+
+services:
+  # ----------------------------------------------------------
+  # HDFS NameNode
+  # ----------------------------------------------------------
+  namenode:
+    image: apache/hadoop:3.3.6
+    container_name: wanfeng-namenode
+    hostname: namenode
+    command: ["hdfs", "namenode"]
+    environment:
+      - ENSURE_NAMENODE_DIR=/tmp/hadoop-hadoop/dfs/name   # 首次启动自动 format
+      - ENSURE_NAMENODE_CLUSTERID=wanfeng-cluster
+      - CORE-SITE.XML_fs.defaultFS=hdfs://namenode:8020
+      - HDFS-SITE.XML_dfs.replication=1
+      - HDFS-SITE.XML_dfs.permissions.enabled=false      # 演示环境关闭权限校验
+      - HADOOP_HEAPSIZE=512
+    ports:
+      - "9870:9870"   # NameNode Web UI  (http://localhost:9870)
+      - "8020:8020"   # NameNode RPC
+    healthcheck:
+      test: ["CMD", "bash", "-c", "nc -z namenode 8020"]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 20s
+
+  # ----------------------------------------------------------
+  # HDFS DataNode
+  # ----------------------------------------------------------
+  datanode:
+    image: apache/hadoop:3.3.6
+    container_name: wanfeng-datanode
+    hostname: datanode
+    command: ["hdfs", "datanode"]
+    environment:
+      - WAITFOR=namenode:8020
+      - CORE-SITE.XML_fs.defaultFS=hdfs://namenode:8020
+      - HDFS-SITE.XML_dfs.replication=1
+      - HDFS-SITE.XML_dfs.permissions.enabled=false
+      - HADOOP_HEAPSIZE=512
+    depends_on:
+      namenode:
+        condition: service_healthy
+    healthcheck:
+      # 等 DataNode 真正注册到 NameNode（Live datanodes 数量 > 0）
+      test: ["CMD", "bash", "-c", "hdfs dfsadmin -report 2>/dev/null | grep 'Live datanodes' | grep -v '(0)'"]
+      interval: 10s
+      timeout: 15s
+      retries: 30
+      start_period: 30s
+
+  # ----------------------------------------------------------
+  # HiveServer2（元数据 Derby，仓库落盘 HDFS）
+  # ----------------------------------------------------------
+  hive:
+    image: apache/hive:4.0.0
+    container_name: wanfeng-hive
+    ports:
+      - "10000:10000"   # HiveServer2 (thrift / beeline / pyhive)
+      - "10002:10002"   # HiveServer2 Web UI
+    environment:
+      - SERVICE_NAME=hiveserver2
+      - HIVE_CUSTOM_CONF_DIR=/opt/hive-custom-conf   # 触发 entrypoint 软链自定义 conf
+    volumes:
+      - ./csv:/data/csv:ro
+      - ./hive:/opt/hive-sql:ro
+      - ./hive/conf:/opt/hive-custom-conf:ro
+    depends_on:
+      namenode:
+        condition: service_healthy
+      datanode:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "bash", "-c", "beeline -u jdbc:hive2://localhost:10000 -e 'show databases;' >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 30s
+      retries: 30
+      start_period: 60s
+
+  # ----------------------------------------------------------
+  # Airflow（调度四层 ETL，DAG 见 airflow/dags/wanfeng_etl.py）
+  # ----------------------------------------------------------
+  airflow:
+    build: ./airflow
+    container_name: wanfeng-airflow
+    command: ["airflow", "standalone"]
+    environment:
+      - AIRFLOW__CORE__LOAD_EXAMPLES=false
+      - AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION=false
+    ports:
+      - "8080:8080"   # Airflow Web UI (http://localhost:8080)
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags:ro
+      - ./hive:/opt/hive-sql:ro          # DAG 里读取 01~04 SQL 脚本
+    depends_on:
+      hive:
+        condition: service_healthy
